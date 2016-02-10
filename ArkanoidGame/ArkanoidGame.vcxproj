@@ -23,6 +23,9 @@
       <DeploymentContent>false</DeploymentContent>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArkMain.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A847C784-486A-4E2D-81EA-682BF2EEE18E}</ProjectGuid>
     <RootNamespace>ArkanoidGame</RootNamespace>

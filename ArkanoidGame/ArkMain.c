@@ -1,77 +1,4 @@
-#include "SDL.h"
-#include "SDL_image.h"
-#include <stdio.h>
-
-#define FRAME_VALUES 10
-
-//Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
-const int PADDLE_WIDTH = 128;
-const int PADDLE_HEIGHT = 32;
-
-const float BALL_SPEED = 550;
-const float PADDLE_SPEED = 550;
-
-Uint32 frametimes[FRAME_VALUES];
-Uint32 frametimelast;
-Uint32 framecount;
-
-float framespersecond;
-
-float delta;
-
-const int FRAMES_LIMIT = 500;
-
-const int BALL_DIAM = 24;
-
-struct Paddle {	float padPosX, padPosY; };
-
-struct Ball { float ballPosX, ballPosY; float dirX, dirY; };
-
-//Starts up SDL and creates window
-bool init();
-
-//Loads media
-bool loadMedia();
-
-bool paddlestick;
-
-//unsigned int lasttick, fpstick, fps, framecount;
-//Frees media and shuts down SDL
-void close();
-
-void moveBall(struct Ball *, struct Paddle*, float delta);
-
-void movePaddle(struct Paddle *, int shift, float delta);
-
-void render(int* w, int* h, SDL_Texture* gTexture, SDL_Rect* rect, struct Ball* ball, struct Paddle* paddle);
-
-void changeDirection(struct Ball* _ball, float dirx, float diry);
-
-bool PadCollision(struct Ball*, struct Paddle*);
-bool WallCollision(SDL_Rect a);
-
-//Loads individual image as texture
-SDL_Texture* loadTexture(char* path);
-
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
-
-//The window renderer
-SDL_Renderer* gRenderer = NULL;
-
-//Current displayed texture
-SDL_Texture* gBackground = NULL;
-
-SDL_Texture* gPaddle = NULL;
-
-SDL_Texture* gBall = NULL;
-
-SDL_Rect padRect;
-
-SDL_Rect ballRect;
+#include "ArkMain.h"
 
 bool init()
 {
@@ -219,38 +146,38 @@ void render(int* w, int* h, SDL_Texture* gTexture, SDL_Rect* rect, struct Ball* 
 	else
 	{
 		rect->x = (int)(paddle->padPosX + 0.5f);
-		rect->y = (int)(paddle->padPosY);
+		rect->y = (int)(paddle->padPosY + 0.5f);
 		rect->w = *w;
 		rect->h = *h;
 		SDL_RenderCopy(gRenderer, gTexture, NULL, rect);
 	}
 }
 
-void movePaddle(struct Paddle* _paddle, int shift, float delta)
+void movePaddle(int shift, float delta)
 {
 	float length = sqrt(shift * shift);
 	shift = PADDLE_SPEED * (shift / length);
 
-	if (_paddle->padPosX + PADDLE_WIDTH > SCREEN_WIDTH)
+	if (paddle.padPosX + PADDLE_WIDTH > SCREEN_WIDTH)
 	{
-		_paddle->padPosX = SCREEN_WIDTH - PADDLE_WIDTH;
+		paddle.padPosX = SCREEN_WIDTH - PADDLE_WIDTH;
 	}
-	else if (_paddle->padPosX < 0)
+	else if (paddle.padPosX < 0)
 	{
-		_paddle->padPosX = 0;
+		paddle.padPosX = 0;
 	}
 	else
 	{
-		_paddle->padPosX += shift * delta;
+		paddle.padPosX += shift * delta;
 	}
-	render(&PADDLE_WIDTH, &PADDLE_HEIGHT, gPaddle, &padRect, NULL, _paddle);
+	render(&PADDLE_WIDTH, &PADDLE_HEIGHT, gPaddle, &padRect, NULL, &paddle);
 }
 
-void changeDirection(struct Ball* _ball, float dirx, float diry)
+void changeDirection(float dirx, float diry)
 {
 	float length = sqrt(dirx * dirx + diry * diry);
-	_ball->dirX = BALL_SPEED * (dirx / length);
-	_ball->dirY = BALL_SPEED * (diry / length);
+	ball.dirX = BALL_SPEED * (dirx / length);
+	ball.dirY = BALL_SPEED * (diry / length);
 }
 
 float GetReflection(float hitx) {
@@ -270,74 +197,74 @@ float GetReflection(float hitx) {
 	return 2.0f * (hitx / (PADDLE_WIDTH / 2.0f));
 }
 
-void moveBall(struct Ball* _ball, struct Paddle* _paddle, float delta)
+void moveBall(float delta)
 {
-	if (!WallCollision(ballRect))
+	if (!WallCollision(ballRect, ball))
 	{
-		if (_ball->dirY <= 0.0f)
+		if (ball.dirY <= 0.0f)
 		{
-			if (_ball->dirX >= 0.0f)
+			if (ball.dirX >= 0.0f)
 			{
-				changeDirection(_ball, -1.0f, -1.0f);
-				_ball->ballPosX += _ball->dirX * delta;
-				_ball->ballPosY += _ball->dirY * delta;
+				changeDirection(-1.0f, -1.0f);
+				ball.ballPosX += ball.dirX * delta - 1.0f;
+				ball.ballPosY += ball.dirY * delta;
 				
-				if (_ball->ballPosY <= 0)
+				if (ball.ballPosY <= 0)
 				{
-					changeDirection(_ball, 1.0f, 1.0f);
-					_ball->ballPosX += _ball->dirX * delta;
-					_ball->ballPosY += _ball->dirY * delta + 1.0f;
+					changeDirection(1.0f, 1.0f);
+					ball.ballPosX += ball.dirX * delta;
+					ball.ballPosY += ball.dirY * delta + 1.0f;
 				}
 			}
-			else if (_ball->dirX <= 0.0f)
+			else if (ball.dirX <= 0.0f)
 			{
-				changeDirection(_ball, 1.0f, -1.0f);
-				_ball->ballPosX += _ball->dirX * delta;
-				_ball->ballPosY += _ball->dirY * delta;
+				changeDirection(1.0f, -1.0f);
+				ball.ballPosX += ball.dirX * delta + 1.0f;
+				ball.ballPosY += ball.dirY * delta;
 				
-				if (_ball->ballPosY <= 0)
+				if (ball.ballPosY <= 0)
 				{
-					changeDirection(_ball, -1.0f, 1.0f);
-					_ball->ballPosX += _ball->dirX * delta;
-					_ball->ballPosY += _ball->dirY * delta + 1.0f;
+					changeDirection(-1.0f, 1.0f);
+					ball.ballPosX += ball.dirX * delta;
+					ball.ballPosY += ball.dirY * delta + 1.0f;
 				}
 			}
 		}
 		else
 		{
-			if (_ball->dirX >= 0.0f)
+			if (ball.dirX >= 0.0f)
 			{
-				changeDirection(_ball, -1.0f, 1.0f);
-				_ball->ballPosX += _ball->dirX * delta;
-				_ball->ballPosY += _ball->dirY * delta;
+				changeDirection(-1.0f, 1.0f);
+				ball.ballPosX += ball.dirX * delta - 1.0f;
+				ball.ballPosY += ball.dirY * delta;
 			}
-			else if(_ball->dirX <= 0.0f)
+			else if(ball.dirX <= 0.0f)
 			{
-				changeDirection(_ball, 1.0f, 1.0f);
-				_ball->ballPosX += _ball->dirX * delta;
-				_ball->ballPosY += _ball->dirY * delta;
+				changeDirection(1.0f, 1.0f);
+				ball.ballPosX += ball.dirX * delta + 1.0f;
+				ball.ballPosY += ball.dirY * delta;
 			}
 		}
 	}
-	else if (!PadCollision(_ball, _paddle))
+	else if (!PadCollision())
 	{
-		float ballcenterx = _ball->ballPosX + BALL_DIAM / 2.0f;
+		float ballcenterx = ball.ballPosX + BALL_DIAM / 2.0f;
 
-		_ball->ballPosY = _paddle->padPosY - BALL_DIAM;
-		changeDirection(_ball, GetReflection(ballcenterx - _paddle->padPosX), -1.0f);
+		ball.ballPosY = paddle.padPosY - BALL_DIAM;
+		changeDirection(GetReflection(ballcenterx - paddle.padPosX), -1.0f);
 
-		_ball->ballPosX += _ball->dirX * delta;
-		_ball->ballPosY += _ball->dirY * delta;
+		ball.ballPosX += ball.dirX * delta;
+		ball.ballPosY += ball.dirY * delta;
 	}
 	else
 	{
-		_ball->ballPosX += _ball->dirX * delta;
-		_ball->ballPosY += _ball->dirY * delta;
+		ball.ballPosX += ball.dirX * delta;
+		ball.ballPosY += ball.dirY * delta;
 	}
-	render(&BALL_DIAM, &BALL_DIAM, gBall, &ballRect, _ball, NULL);
+	render(&BALL_DIAM, &BALL_DIAM, gBall, &ballRect, &ball, NULL);
 }
 
-bool PadCollision(struct Ball* ball, struct Paddle* paddle)
+bool PadCollision()
 {
 	//The sides of the rectangles
 		int leftA, leftB;
@@ -346,21 +273,21 @@ bool PadCollision(struct Ball* ball, struct Paddle* paddle)
 		int bottomA, bottomB;
 
 		//Calculate the sides of rect A
-		leftA = ball->ballPosX;
-		rightA = ball->ballPosX + BALL_DIAM;
-		topA = ball->ballPosY;
-		bottomA = ball->ballPosY + BALL_DIAM;
+		leftA = ball.ballPosX;
+		rightA = ball.ballPosX + BALL_DIAM;
+		topA = ball.ballPosY;
+		bottomA = ball.ballPosY + BALL_DIAM;
 
 		//Calculate the sides of rect B
-		leftB = paddle->padPosX;
-		rightB = paddle->padPosX + PADDLE_WIDTH;
-		topB = paddle->padPosY;
-		bottomB = paddle->padPosY + PADDLE_HEIGHT;
+		leftB = paddle.padPosX;
+		rightB = paddle.padPosX + PADDLE_WIDTH;
+		topB = paddle.padPosY;
+		bottomB = paddle.padPosY + PADDLE_HEIGHT;
 
 		//If any of the sides from A are outside of B
 
 		//If any of the sides from A are outside of B
-		if (bottomA >= topB && ball->ballPosX + BALL_DIAM >= paddle->padPosX && ball->ballPosX <= paddle->padPosX + PADDLE_WIDTH)
+		if (bottomA >= topB && ball.ballPosX + BALL_DIAM >= paddle.padPosX && ball.ballPosX <= paddle.padPosX + PADDLE_WIDTH)
 		{
 			return false;
 		}
@@ -386,7 +313,6 @@ bool WallCollision(SDL_Rect a)
 	if (bottomA >= SCREEN_HEIGHT)
 	{
 		paddlestick = true;
-		return true;
 	}
 
 	if (topA <= 0)
@@ -415,52 +341,32 @@ void fpsthink() {
 	Uint32 count;
 	Uint32 i;
 
-	// frametimesindex is the position in the array. It ranges from 0 to FRAME_VALUES.
-	// This value rotates back to 0 after it hits FRAME_VALUES.
 	frametimesindex = framecount % FRAME_VALUES;
 	
-	// store the current time
 	getticks = SDL_GetTicks();
 
-	// save the frame time value
 	frametimes[frametimesindex] = getticks - frametimelast;
 	delta = (getticks - frametimelast) / 1000.0f;
-	// save the last frame time for the next fpsthink
+
 	frametimelast = getticks;
 
-	// increment the frame count
 	framecount++;
 
-	// Work out the current framerate
-
-	// The code below could be moved into another function if you don't need the value every frame.
-
-	// I've included a test to see if the whole array has been written to or not. This will stop
-	// strange values on the first few (FRAME_VALUES) frames.
 	if (framecount < FRAME_VALUES) {
-
 		count = framecount;
-
 	}
 	else {
-
 		count = FRAME_VALUES;
-
 	}
 
-	// add up all the values and divide to get the average frame time.
 	framespersecond = 0;
 	for (i = 0; i < count; i++) {
-
 		framespersecond += frametimes[i];
-
 	}
 
 	framespersecond /= count;
 
-	// now to make it an actual frames per second value...
 	framespersecond = 1000.f / framespersecond;
-
 }
 
 int main(int argc, char* args[])
@@ -497,15 +403,8 @@ int main(int argc, char* args[])
 
 			paddlestick = true;
 
-			struct Paddle paddle;
 			paddle.padPosX = SCREEN_WIDTH / 2 - 64;
 			paddle.padPosY = SCREEN_HEIGHT - 32;
-			
-			struct Ball ball;
-			ball.ballPosX = SCREEN_WIDTH / 2 - 12;
-			ball.ballPosY = SCREEN_HEIGHT - 55;
-			ball.dirX = 0;
-			ball.dirY =  0;
 
 			//While application is running
 			while (!quit)
@@ -521,7 +420,6 @@ int main(int argc, char* args[])
 				}
 
 				paddle.padPosX = padRect.x;
-				paddle.padPosY = padRect.y;
 
 				ball.ballPosX = ballRect.x;
 				ball.ballPosY = ballRect.y;
@@ -530,19 +428,18 @@ int main(int argc, char* args[])
 				if (keystates[SDL_SCANCODE_LEFT])
 				{
 					int shift = -1.0f;
-					movePaddle(&paddle, shift, delta);
+					movePaddle(shift, delta);
 				}
 				if (keystates[SDL_SCANCODE_RIGHT])
 				{
 					int shift = 1.0f;
-					movePaddle(&paddle, shift, delta);
+					movePaddle(shift, delta);
 				}
 
 				if (keystates[SDL_SCANCODE_SPACE])
 				{
-						paddlestick = false;
+					paddlestick = false;
 				}
-
 				
 				if (paddlestick)
 				{
@@ -552,9 +449,8 @@ int main(int argc, char* args[])
 				
 				if (!paddlestick)
 				{
-					moveBall(&ball, &paddle, delta);
+					moveBall(delta);
 				}
-				
 		
 				//Clear screen
 				SDL_RenderClear(gRenderer);
