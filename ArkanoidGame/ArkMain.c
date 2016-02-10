@@ -2,8 +2,6 @@
 #include "SDL_image.h"
 #include <stdio.h>
 
-
-#define FPS_DELAY 500
 #define FRAME_VALUES 10
 
 //Screen dimension constants
@@ -15,6 +13,12 @@ const int PADDLE_HEIGHT = 32;
 
 const float BALL_SPEED = 550;
 const float PADDLE_SPEED = 550;
+
+Uint32 frametimes[FRAME_VALUES];
+Uint32 frametimelast;
+Uint32 framecount;
+
+float framespersecond;
 
 float delta;
 
@@ -35,13 +39,6 @@ bool loadMedia();
 bool paddlestick;
 
 //unsigned int lasttick, fpstick, fps, framecount;
-
-Uint32 frametimes[FRAME_VALUES];
-Uint32 frametimelast;
-Uint32 framecount;
-
-float framespersecond;
-
 //Frees media and shuts down SDL
 void close();
 
@@ -522,19 +519,6 @@ int main(int argc, char* args[])
 						quit = true;
 					}
 				}
-
-				//unsigned int curtick = SDL_GetTicks();
-				//float delta = (getticks - frametimelast) / 1000.0f;
-				//if (curtick - fpstick >= FPS_DELAY) {
-				//	fps = framecount * (1000.0f / (curtick - fpstick));
-				//	fpstick = curtick;
-				//	framecount = 0;
-				//	printf("(fps: %u)", fps);
-				//}
-				//else {
-				//	framecount++;
-				//}
-				//lasttick = curtick;
 
 				paddle.padPosX = padRect.x;
 				paddle.padPosY = padRect.y;
