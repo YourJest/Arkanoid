@@ -1,6 +1,10 @@
 #pragma once
 #ifndef ARKMAIN_H
 #define FRAME_VALUES 10
+#define MAX_MAP_X 10
+#define MAX_MAP_Y 15
+#define _CRT_SECURE_NO_WARNINGS
+
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -13,9 +17,14 @@ const int SCREEN_HEIGHT = 600;
 const int PADDLE_WIDTH = 128;
 const int PADDLE_HEIGHT = 32;
 
+const int BRICK_WIDTH = 80;
+const int BRICK_HEIGHT = 40;
+
 const float BALL_SPEED = 550;
 const float PADDLE_SPEED = 550;
 
+int state[MAX_MAP_Y*MAX_MAP_X] = { 0 };
+int iter = 0;
 Uint32 frametimes[FRAME_VALUES];
 Uint32 frametimelast;
 Uint32 framecount;
@@ -36,6 +45,10 @@ struct Ball { float ballPosX, ballPosY; float dirX, dirY; };
 
 struct Ball ball;
 
+struct Bricks { int tile[MAX_MAP_Y][MAX_MAP_X];};
+
+struct Bricks bricks;
+
 //Starts up SDL and creates window
 bool init();
 
@@ -48,17 +61,21 @@ bool paddlestick;
 //Frees media and shuts down SDL
 void close();
 
+void renderBrick(SDL_Rect brickRect, int x, int y);
+void renderBall();
+void renderPaddle();
+
 void moveBall(float delta);
 
-void movePaddle(int shift, float delta);
+void movePaddle(float shift, float delta);
 
-void render(int* w, int* h, SDL_Texture* gTexture, SDL_Rect* rect, struct Ball* ball, struct Paddle* paddle);
+void loadBricks(char* path);
 
 void changeDirection(float dirx, float diry);
 
 bool PadCollision();
 bool WallCollision(SDL_Rect a);
-
+bool BrickCollision();
 //Loads individual image as texture
 SDL_Texture* loadTexture(char* path);
 
@@ -75,8 +92,12 @@ SDL_Texture* gPaddle = NULL;
 
 SDL_Texture* gBall = NULL;
 
+SDL_Texture* gBrick = NULL;
+
 SDL_Rect padRect;
 
 SDL_Rect ballRect;
+
+SDL_Rect bricksRect[MAX_MAP_Y*MAX_MAP_X];
 
 #endif

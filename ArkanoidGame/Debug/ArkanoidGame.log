@@ -1,27 +1,15 @@
 ﻿  ArkMain.c
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(7): warning C4013: memset: нет определения; предполагается "extern" с возвратом типа "int"
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(159): warning C4244: =: преобразование "const float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(163): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(173): warning C4090: функция: разные квалификаторы "const"
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(158): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(178): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(189): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(202): warning C4020: WallCollision: слишком много фактических параметров
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(264): warning C4090: функция: разные квалификаторы "const"
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(276): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(277): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(278): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(279): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(282): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(283): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(284): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(285): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(406): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(407): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(422): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(424): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(425): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(430): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
-f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(435): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(147): warning C4028: формальный параметр 1 отличается от объявления
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(147): warning C4029: объявленный список формальных параметров отличается от объявления
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(206): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(207): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(208): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(209): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(193): warning C4101: i: неиспользованная локальная переменная
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(224): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(239): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(250): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(490): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+f:\projects\visual studio 2015\projects\arkanoidgame\arkanoidgame\arkmain.c(491): warning C4244: =: преобразование "int" в "float", возможна потеря данных
   ArkanoidGame.vcxproj -> F:\Projects\Visual Studio 2015\Projects\ArkanoidGame\Debug\ArkanoidGame.exe
   ArkanoidGame.vcxproj -> F:\Projects\Visual Studio 2015\Projects\ArkanoidGame\Debug\ArkanoidGame.pdb (Partial PDB)
