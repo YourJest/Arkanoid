@@ -1,35 +1,18 @@
 ﻿  ArkMain.c
-ArkMain.c(221): warning C4244: =: преобразование "const float" в "int", возможна потеря данных
-ArkMain.c(225): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
-ArkMain.c(235): warning C4090: функция: разные квалификаторы "const"
-ArkMain.c(220): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-ArkMain.c(240): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-ArkMain.c(251): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
-ArkMain.c(326): warning C4090: функция: разные квалификаторы "const"
-ArkMain.c(338): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(339): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(340): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(341): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(344): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(345): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(346): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(347): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(435): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(436): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(439): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(440): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(461): warning C4244: =: преобразование "float" в "unsigned int", возможна потеря данных
-ArkMain.c(472): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(473): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(475): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(476): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(481): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(486): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
-ArkMain.c(464): warning C4101: buf: неиспользованная локальная переменная
+ArkMain.c(203): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+ArkMain.c(204): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+ArkMain.c(205): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+ArkMain.c(206): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
+ArkMain.c(190): warning C4101: i: неиспользованная локальная переменная
+ArkMain.c(221): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
+ArkMain.c(236): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+ArkMain.c(246): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
+ArkMain.c(516): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(517): warning C4244: =: преобразование "int" в "float", возможна потеря данных
   Создание кода
-  Создание кода завершено
-  5 of 15 functions (33.3%) were compiled, the rest were copied from previous compilation.
+  2 of 24 functions ( 8.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
   ArkanoidGame.vcxproj -> F:\Projects\Visual Studio 2015\Projects\ArkanoidGame\Release\ArkanoidGame.exe
   ArkanoidGame.vcxproj -> F:\Projects\Visual Studio 2015\Projects\ArkanoidGame\Release\ArkanoidGame.pdb (Full PDB)

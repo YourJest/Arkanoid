@@ -1,10 +1,10 @@
 #include "ArkMain.h"
 
-bool init()
+int init()
 {
 	//Initialization flag
-	bool success = true;
-	//memset(frametimes, 0, sizeof(frametimes));
+	int success = 1;
+	
 	framecount = 0;
 	framespersecond = 0;
 	frametimelast = SDL_GetTicks();
@@ -13,7 +13,7 @@ bool init()
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		success = false;
+		success = 0;
 	}
 	else
 	{
@@ -28,7 +28,7 @@ bool init()
 		if (gWindow == NULL)
 		{
 			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-			success = false;
+			success = 0;
 		}
 		else
 		{
@@ -37,7 +37,7 @@ bool init()
 			if (gRenderer == NULL)
 			{
 				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-				success = false;
+				success = 0;
 			}
 			else
 			{
@@ -49,7 +49,7 @@ bool init()
 				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
 					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-					success = false;
+					success = 0;
 				}
 			}
 		}
@@ -57,65 +57,6 @@ bool init()
 
 	return success;
 }
-
-bool loadMedia()
-{
-	//Loading success flag
-	bool success = true;
-
-	//Load PNG texture
-	gBackground = loadTexture("Images/Background.png");
-	if (gBackground == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	gPaddle = loadTexture("Images/Paddle.png");
-	if (gPaddle == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	gBall = loadTexture("Images/Ball.png");
-	if (gBall == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-	gBrick = loadTexture("Images/Brick.png");
-	if (gBrick == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-     loadBricks("Map/bricks.dat");
-
-	return success;
-}
-
-void close()
-{
-	//Free loaded image
-	SDL_DestroyTexture(gBackground);
-	gBackground = NULL;
-	SDL_DestroyTexture(gPaddle);
-	gPaddle = NULL;
-	SDL_DestroyTexture(gBall);
-	gBall = NULL;
-	SDL_DestroyTexture(gBrick);
-	gBrick = NULL;
-
-	//Destroy window	
-	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	gRenderer = NULL;
-
-	//Quit SDL subsystems
-	IMG_Quit();
-	SDL_Quit();
-}
-
 SDL_Texture* loadTexture(char* path)
 {
 	//The final texture
@@ -142,32 +83,40 @@ SDL_Texture* loadTexture(char* path)
 
 	return newTexture;
 }
-
-void renderBrick(int x, int y)
- {
-	 bricksRect[iter].x = x;
-	 bricksRect[iter].y = y;
-	 bricksRect[iter].w = BRICK_WIDTH;
-	 bricksRect[iter].h = BRICK_HEIGHT;
-	 SDL_RenderCopy(gRenderer, gBrick, NULL, &bricksRect[iter]);
-}
-void renderBall()
+int loadMedia()
 {
-	ballRect.x = (int)(ball.ballPosX + 0.5f);
-	ballRect.y = (int)(ball.ballPosY + 0.5f);
-	ballRect.w = BALL_DIAM;
-	ballRect.h = BALL_DIAM;
-	SDL_RenderCopy(gRenderer, gBall, NULL, &ballRect);
-}
-void renderPaddle()
-{
-	padRect.x = (int)(paddle.padPosX + 0.5f);
-	padRect.y = (int)(paddle.padPosY + 0.5f);
-	padRect.w = PADDLE_WIDTH;
-	padRect.h = PADDLE_HEIGHT;
-	SDL_RenderCopy(gRenderer, gPaddle, NULL, &padRect);
-}
+	//Loading success flag
+	int success = 1;
 
+	//Load PNG texture
+	gBackground = loadTexture("Images/Background.png");
+	if (gBackground == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	gPaddle = loadTexture("Images/Paddle.png");
+	if (gPaddle == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	gBall = loadTexture("Images/Ball.png");
+	if (gBall == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	gBrick = loadTexture("Images/Brick.png");
+	if (gBrick == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+     loadBricks("Map/bricks.dat");
+
+	return success;
+}
 void loadBricks(char* path)
 {
 	int x, y;
@@ -187,31 +136,77 @@ void loadBricks(char* path)
 	}
 	fclose(fp);
 }
+void close()
+{
+	//Free loaded image
+	SDL_DestroyTexture(gBackground);
+	gBackground = NULL;
+	SDL_DestroyTexture(gPaddle);
+	gPaddle = NULL;
+	SDL_DestroyTexture(gBall);
+	gBall = NULL;
+	SDL_DestroyTexture(gBrick);
+	gBrick = NULL;
 
+	//Destroy window	
+	SDL_DestroyRenderer(gRenderer);
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
+	gRenderer = NULL;
+
+	//Quit SDL subsystems
+	IMG_Quit();
+	SDL_Quit();
+}
+
+void renderBall()
+{
+	ballRect.x = (int)(ball.ballPosX + 0.5f);
+	ballRect.y = (int)(ball.ballPosY + 0.5f);
+	ballRect.w = BALL_DIAM;
+	ballRect.h = BALL_DIAM;
+	SDL_RenderCopy(gRenderer, gBall, NULL, &ballRect);
+}
+void renderPaddle()
+{
+	padRect.x = (int)(paddle.padPosX + 0.5f);
+	padRect.y = (int)(paddle.padPosY + 0.5f);
+	padRect.w = PADDLE_WIDTH;
+	padRect.h = PADDLE_HEIGHT;
+	SDL_RenderCopy(gRenderer, gPaddle, NULL, &padRect);
+}
 void drawBricks()
 {
-	int x, y, i ;
-	iter = 0;
+	int x, y, i;
+	i = 0;
 	for (y = 0; y<MAX_MAP_Y; y++)
 	{
 		for (x = 0; x < MAX_MAP_X; x++)
 		{
 			if (bricks.tile[y][x] != 0)
 			{
-				if (state[iter] == 0)
+				if (bricks.state[i] == 0)
 				{
-					renderBrick(x * BRICK_WIDTH, y * BRICK_HEIGHT);
+					renderBrick(&bricksRect[i], x * BRICK_WIDTH, y * BRICK_HEIGHT);
 				}else 
 				{
-					bricksRect[iter].x = NULL;
-					bricksRect[iter].y = NULL;
-					bricksRect[iter].w = NULL;
-					bricksRect[iter].h = NULL;
+					bricksRect[i].x = NULL;
+					bricksRect[i].y = NULL;
+					bricksRect[i].w = NULL;
+					bricksRect[i].h = NULL;
 				}
-				iter++;
+				i++;
 			}
 		}
 	}
+}
+void renderBrick(SDL_Rect* brick, int x, int y)
+ {
+	 brick->x = x + 0.5f;
+	 brick->y = y + 0.5f;
+	 brick->w = BRICK_WIDTH;
+	 brick->h = BRICK_HEIGHT;
+	 SDL_RenderCopy(gRenderer, gBrick, NULL, brick);
 }
 
 void movePaddle(float shift, float delta)
@@ -219,11 +214,11 @@ void movePaddle(float shift, float delta)
 	float length = (float)sqrt(shift * shift);
 	shift = PADDLE_SPEED * (shift / length);
 
-	if (paddle.padPosX + PADDLE_WIDTH > SCREEN_WIDTH)
+	if (padRect.x + PADDLE_WIDTH > SCREEN_WIDTH)
 	{
-		paddle.padPosX = (int)SCREEN_WIDTH - PADDLE_WIDTH;
+		paddle.padPosX = SCREEN_WIDTH - PADDLE_WIDTH;
 	}
-	else if (paddle.padPosX < 0)
+	else if (padRect.x < 0)
 	{
 		paddle.padPosX = 0;
 	}
@@ -231,7 +226,6 @@ void movePaddle(float shift, float delta)
 	{
 		paddle.padPosX += shift * delta;
 	}
-	renderPaddle();
 }
 
 void changeDirection(float dirx, float diry)
@@ -240,176 +234,97 @@ void changeDirection(float dirx, float diry)
 	ball.dirX = BALL_SPEED * (dirx / length);
 	ball.dirY = BALL_SPEED * (diry / length);
 }
-
 float GetReflection(float hitx) {
-	// Make sure the hitx variable is within the width of the paddle
-	if (hitx < 0) {
+	if (hitx < 0)
 		hitx = 0;
-	}
-	else if (hitx > PADDLE_WIDTH) {
+	else if (hitx > PADDLE_WIDTH) 
 		hitx = PADDLE_WIDTH;
-	}
 
-	// Everything to the left of the center of the paddle is reflected to the left
-	// while everything right of the center is reflected to the right
 	hitx -= PADDLE_WIDTH/ 2.0f;
-
-	// Scale the reflection, making it fall in the range -2.0f to 2.0f
 	return 2.0f * (hitx / (PADDLE_WIDTH / 2.0f));
 }
 
-void moveBall(float delta)
+int checkSide(SDL_Rect* _brick)
 {
-	if (!WallCollision(ballRect))
-	{
-		if (ball.dirY < 0.0f)
-		{
-			if (ball.dirX > 0.0f)
-			{
-				changeDirection(-1.0f, -1.0f);
-				ball.ballPosX += ball.dirX * delta - 2.0f;
-				ball.ballPosY += ball.dirY * delta;
-				
-				if (ball.ballPosY < 0)
-				{
-					changeDirection(1.0f, 1.0f);
-					ball.ballPosX += ball.dirX * delta;
-					ball.ballPosY += ball.dirY * delta + 2.0f;
-				}
-			}
-			else if (ball.dirX < 0.0f)
-			{
-				changeDirection(1.0f, -1.0f);
-				ball.ballPosX += ball.dirX * delta + 2.0f;
-				ball.ballPosY += ball.dirY * delta;
-				
-				if (ball.ballPosY < 0)
-				{
-					changeDirection(-1.0f, 1.0f);
-					ball.ballPosX += ball.dirX * delta;
-					ball.ballPosY += ball.dirY * delta + 2.0f;
-				}
-			}
-		}
-		else if (ball.dirY > 0.0f)
-		{
-			if (ball.dirX > 0.0f)
-			{
-				changeDirection(-1.0f, 1.0f);
-				ball.ballPosX += ball.dirX * delta - 2.0f;
-				ball.ballPosY += ball.dirY * delta;
-			}
-			else if(ball.dirX < 0.0f)
-			{
-				changeDirection(1.0f, 1.0f);
-				ball.ballPosX += ball.dirX * delta + 2.0f;
-				ball.ballPosY += ball.dirY * delta;
-			}
+	int topBall, topBrick;
+	int botBall, botBrick;
+	int leftBall, leftBrick;
+	int rightBall, rightBrick;
 
-		} 
-	}
-	else if (!PadCollision())
-	{
-		float ballcenterx = ball.ballPosX + BALL_DIAM / 2.0f;
+	topBall = ballRect.y;
+	botBall = ballRect.y + ballRect.h;
+	leftBall = ballRect.x;
+	rightBall = ballRect.x + ballRect.w;
 
-		ball.ballPosY = paddle.padPosY - BALL_DIAM;
-		changeDirection(GetReflection(ballcenterx - paddle.padPosX), -1.0f);
+	topBrick = _brick->y;
+	botBrick = _brick->y + _brick->h;
+	leftBrick = _brick->x;
+	rightBrick = _brick->x + _brick->w;
 
-		ball.ballPosX += ball.dirX * delta;
-		ball.ballPosY += ball.dirY * delta;
-	}
-	else if (!BrickCollision())
-	{
-		if (ball.dirY < 0.0f)
-		{
-			if (ball.dirX > 0.0f)
-			{
-				changeDirection(-1.0f, 1.0f);
-				ball.ballPosX += ball.dirX * delta;
-				ball.ballPosY += ball.dirY * delta;
-			}
-			else if (ball.dirX < 0.0f)
-			{
-				changeDirection(1.0f, 1.0f);
-				ball.ballPosX += ball.dirX * delta;
-				ball.ballPosY += ball.dirY * delta;
-			}
-		}
-		else if (ball.dirY > 0.0f)
-		{
-			if (ball.dirX > 0.0f)
-			{
-				changeDirection(-1.0f, -1.0f);
-				ball.ballPosX += ball.dirX * delta;
-				ball.ballPosY += ball.dirY * delta;
-			}
-			else if (ball.dirX < 0.0f)
-			{
-				changeDirection(1.0f, -1.0f);
-				ball.ballPosX += ball.dirX * delta;
-				ball.ballPosY += ball.dirY * delta;
-			}
-		}
-	}
-	else
-	{
-		ball.ballPosX += ball.dirX * delta;
-		ball.ballPosY += ball.dirY * delta;
-	}
+	if (topBall <= botBrick && leftBall >= leftBrick - ballRect.w + 3 && rightBall <= rightBrick + ballRect.w - 3 && topBall >= topBrick)
+		//Top of ball collides with bot of brick
+		return 0;
+	if (botBall >= topBrick && leftBall >= leftBrick - ballRect.w + 3 && rightBall <= rightBrick + ballRect.w - 3)
+		//bot of ball collides with top of brick
+		return 1;
+	if (leftBall <= rightBrick && rightBall >= rightBrick)
+		//left 
+		return 2;
+	if (rightBall >= leftBrick && leftBall <= leftBrick)
+		//right 
+		return 3;
 }
 
-bool PadCollision()
+int PadCollision()
 {
 		if (SDL_HasIntersection(&ballRect, &padRect))
 		{
-			return false;
+			return 0;
 		}
-		return true;
+		return 1;
 }
-bool WallCollision(SDL_Rect a)
+int WallCollision()
 {
-	//The sides of the rectangles
 	int leftA;
 	int rightA;
 	int topA;
 	int bottomA;
 
-	//Calculate the sides of rect A
-	leftA = a.x;
-	rightA = a.x + a.w;
-	topA = a.y;
-	bottomA = a.y + a.h;
+	leftA = ballRect.x;
+	rightA = ballRect.x + ballRect.w;
+	topA = ballRect.y;
+	bottomA = ballRect.y + ballRect.h;
 
 	if (bottomA >= SCREEN_HEIGHT)
 	{
 		ball.ballPosX = paddle.padPosX + PADDLE_WIDTH / 2 - BALL_DIAM / 2;
 		ball.ballPosY = paddle.padPosY - BALL_DIAM - 1.0f;
-		paddlestick = true;
+		paddlestick = 1;
 	}
 
 	if (topA <= 0)
 	{
-		return false;
+		wallSide = 0;
+		return 0;
 	}
 
 	if (rightA >= SCREEN_WIDTH)
 	{
-		return false;
+		wallSide = 1;
+		return 0;
 	}
-
 	if (leftA <= 0)
 	{
-		return false;
+		wallSide = 2;
+		return 0;
 	}
-
-	//If none of the sides from A are outside B
-	return true;
+	return 1;
 }
-bool BrickCollision()
+int BrickCollision()
 {
 	int x, y, i;
-
 	i = 0;
+
 	for (y = 0; y < MAX_MAP_Y; y++)
 	{
 		for (x = 0; x < MAX_MAP_X; x++)
@@ -418,14 +333,85 @@ bool BrickCollision()
 			{
 				if (SDL_HasIntersection(&bricksRect[i], &ballRect))
 				{
-					state[i] = 1;
-					return false;
+					bricks.state[i] = 1;
+					brickSide = checkSide(&bricksRect[i]);
+					return 0;
 				}
-			    i++;
+				i++;
 			}
 		}
 	}
-	return true;
+	return 1;
+}
+
+void moveBall(float delta){
+	if (!WallCollision())
+	{
+		//WallSide: 0 = Top, 1 = Right, 2 = Left
+		if (wallSide == 0)
+		{
+			if (ball.dirX > 0)
+				changeDirection(abs(ball.dirX), abs(ball.dirY));
+			else if (ball.dirX < 0)
+				changeDirection(-(abs(ball.dirX)), abs(ball.dirY));
+		}
+		else if (wallSide == 1)
+		{
+			if (ball.dirY > 0)
+				changeDirection(-(abs(ball.dirX)), abs(ball.dirY));
+			else if (ball.dirY < 0)
+				changeDirection(-(abs(ball.dirX)), -(abs(ball.dirY)));
+		}
+		else if (wallSide == 2)
+		{
+			if (ball.dirY > 0)
+				changeDirection(abs(ball.dirX), abs(ball.dirY));
+			else if (ball.dirY < 0)
+				changeDirection(abs(ball.dirX), -(abs(ball.dirY)));
+		}
+	}
+	else if (!PadCollision())
+	{
+		float ballcenterx = ball.ballPosX + BALL_DIAM / 2.0f;
+
+		ball.ballPosY = paddle.padPosY - BALL_DIAM;
+		changeDirection(GetReflection(ballcenterx - paddle.padPosX), -1.0f);
+
+	}
+	else if (!BrickCollision())
+	{
+		//BrickSide: 0 = Top, 1 = Bottom, 2 = Left, 3 = Right
+		if (brickSide == 0)
+		{
+			if (ball.dirX > 0)
+				changeDirection(ball.dirX, abs(ball.dirY));
+			else if (ball.dirX < 0)
+				changeDirection(-(abs(ball.dirX)), abs(ball.dirY));
+		}
+		else if (brickSide == 1)
+		{
+			if (ball.dirX > 0)
+				changeDirection(abs(ball.dirX), -(abs(ball.dirY)));
+			else if (ball.dirX < 0)
+				changeDirection(-(abs(ball.dirX)), -(abs(ball.dirY)));
+		}
+		else if (brickSide == 2)
+		{
+			if (ball.dirY > 0)
+				changeDirection(abs(ball.dirX), abs(ball.dirY));
+			else if (ball.dirY < 0)
+				changeDirection(abs(ball.dirX), -(abs(ball.dirY)));
+		}
+		else if (brickSide == 3)
+		{
+			if (ball.dirY > 0)
+				changeDirection(-(abs(ball.dirX)), abs(ball.dirY));
+			else if (ball.dirY < 0)
+				changeDirection(-(abs(ball.dirX)), -(abs(ball.dirY)));
+		}
+	}
+	ball.ballPosX += ball.dirX * delta;
+	ball.ballPosY += ball.dirY * delta;
 }
 
 void fpsthink() {
@@ -480,12 +466,12 @@ int main(int argc, char* args[])
 		else
 		{
 			//Main loop flag
-			bool quit = false;
+			int quit = 0;
 
 			//Event handler
 			SDL_Event e;
 
-			paddlestick = true;
+			paddlestick = 1;
 
 			paddle.padPosX = SCREEN_WIDTH / 2 - 64;
 			paddle.padPosY = SCREEN_HEIGHT - 32;
@@ -502,7 +488,7 @@ int main(int argc, char* args[])
 					//User requests quit
 					if (e.type == SDL_QUIT)
 					{
-						quit = true;
+						quit = 1;
 					}
 				}
 
@@ -522,7 +508,7 @@ int main(int argc, char* args[])
 				{
 					if (paddlestick)
 					{
-					paddlestick = false;
+					paddlestick = 0;
  					changeDirection(1.0f, -1.0f);
 					}
 				}
@@ -537,12 +523,6 @@ int main(int argc, char* args[])
 					ball.ballPosX = paddle.padPosX + PADDLE_WIDTH / 2 - BALL_DIAM / 2;
 					ball.ballPosY = paddle.padPosY - BALL_DIAM - 1.0f;
 				}
-				
-
-				if (ball.ballPosY + BALL_DIAM > SCREEN_HEIGHT)
-				{
-					paddlestick = true;
-				}
 
 				//Clear screen
 				SDL_RenderClear(gRenderer);
@@ -556,7 +536,7 @@ int main(int argc, char* args[])
 				//Update screen
 				SDL_RenderPresent(gRenderer);
 
-				SDL_Delay(3);
+				SDL_Delay(4);
 
 				fpsthink();
 				printf("%f\n", framespersecond);
