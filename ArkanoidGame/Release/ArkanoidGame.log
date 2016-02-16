@@ -3,16 +3,42 @@ ArkMain.c(203): warning C4047: =: "int" отличается по уровням
 ArkMain.c(204): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
 ArkMain.c(205): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
 ArkMain.c(206): warning C4047: =: "int" отличается по уровням косвенного обращения от "void *"
-ArkMain.c(190): warning C4101: i: неиспользованная локальная переменная
-ArkMain.c(221): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
-ArkMain.c(236): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-ArkMain.c(246): warning C4244: =: преобразование "const int" в "float", возможна потеря данных
-ArkMain.c(516): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-ArkMain.c(517): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(259): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+ArkMain.c(381): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(381): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(383): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(383): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(388): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(388): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(390): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(390): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(395): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(395): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(397): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(397): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(414): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(414): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(416): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(416): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(421): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(421): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(423): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(423): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(428): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(428): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(430): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(430): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(435): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(435): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(437): warning C4244: функция: преобразование "float" в "int", возможна потеря данных
+ArkMain.c(437): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+ArkMain.c(446): warning C4013: srand: нет определения; предполагается "extern" с возвратом типа "int"
+ArkMain.c(446): warning C4013: time: нет определения; предполагается "extern" с возвратом типа "int"
+ArkMain.c(448): warning C4013: rand: нет определения; предполагается "extern" с возвратом типа "int"
   Создание кода
-  2 of 24 functions ( 8.3%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  15 of 29 functions (51.7%) were compiled, the rest were copied from previous compilation.
+    5 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   ArkanoidGame.vcxproj -> F:\Projects\Visual Studio 2015\Projects\ArkanoidGame\Release\ArkanoidGame.exe
   ArkanoidGame.vcxproj -> F:\Projects\Visual Studio 2015\Projects\ArkanoidGame\Release\ArkanoidGame.pdb (Full PDB)
