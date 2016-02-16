@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArkMain.h" />
+    <ClInclude Include="Const.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A847C784-486A-4E2D-81EA-682BF2EEE18E}</ProjectGuid>

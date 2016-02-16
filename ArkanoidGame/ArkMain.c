@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "ArkMain.h"
 
 int init()
@@ -83,41 +84,7 @@ SDL_Texture* loadTexture(char* path)
 
 	return newTexture;
 }
-int loadMedia()
-{
-	//Loading success flag
-	int success = 1;
-
-	//Load PNG texture
-	gBackground = loadTexture("Images/Background.png");
-	if (gBackground == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = 0;
-	}
-	gPaddle = loadTexture("Images/Paddle.png");
-	if (gPaddle == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = 0;
-	}
-	gBall = loadTexture("Images/Ball.png");
-	if (gBall == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = 0;
-	}
-	gBrick = loadTexture("Images/Brick.png");
-	if (gBrick == NULL)
-	{
-		printf("Failed to load texture image!\n");
-		success = 0;
-	}
-     loadBricks("Map/bricks.dat");
-
-	return success;
-}
-void loadBricks(char* path)
+void loadLevel (char* path)
 {
 	int x, y;
 	FILE *fp;
@@ -136,6 +103,45 @@ void loadBricks(char* path)
 	}
 	fclose(fp);
 }
+int loadMedia()
+{
+	int success = 1;
+	int i;
+	gBackground = loadTexture("Images/Background.png");
+	if (gBackground == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	gPaddle = loadTexture("Images/Paddle.png");
+	if (gPaddle == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	gBall = loadTexture("Images/Ball.png");
+	if (gBall == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	for (i = 0; i < 4; i++)
+	{
+		gBricks[i] = loadTexture(bricksPaths[i]);
+		if (gBricks[i] == NULL)
+		{
+			printf("Failed to load texture image!\n");
+			success = 0;
+		}
+	}
+	gLive = loadTexture("Images/Ball.png");
+	if (gLive == NULL)
+	{
+		printf("Failed to load texture image!\n");
+		success = 0;
+	}
+	return success;
+}
 void close()
 {
 	//Free loaded image
@@ -145,8 +151,11 @@ void close()
 	gPaddle = NULL;
 	SDL_DestroyTexture(gBall);
 	gBall = NULL;
-	SDL_DestroyTexture(gBrick);
-	gBrick = NULL;
+	for (int i = 0; i < 4; i++)
+	{
+		SDL_DestroyTexture(gBricks[i]);
+		gBricks[i] = NULL;
+	}
 
 	//Destroy window	
 	SDL_DestroyRenderer(gRenderer);
@@ -187,8 +196,9 @@ void drawBricks()
 			{
 				if (bricks.state[i] == 0)
 				{
-					renderBrick(&bricksRect[i], x * BRICK_WIDTH, y * BRICK_HEIGHT);
-				}else 
+					renderBrick(&bricksRect[i], x * BRICK_WIDTH, y * BRICK_HEIGHT, bricks.color[i]);
+				}
+				else
 				{
 					bricksRect[i].x = NULL;
 					bricksRect[i].y = NULL;
@@ -200,13 +210,29 @@ void drawBricks()
 		}
 	}
 }
-void renderBrick(SDL_Rect* brick, int x, int y)
- {
-	 brick->x = x + 0.5f;
-	 brick->y = y + 0.5f;
-	 brick->w = BRICK_WIDTH;
-	 brick->h = BRICK_HEIGHT;
-	 SDL_RenderCopy(gRenderer, gBrick, NULL, brick);
+void renderBrick(SDL_Rect* brick, int x, int y, int tilePos)
+{
+	brick->x = x;
+	brick->y = y;
+	brick->w = BRICK_WIDTH;
+	brick->h = BRICK_HEIGHT;
+	SDL_RenderCopy(gRenderer, gBricks[tilePos], NULL, brick);
+}
+void renderLives(SDL_Rect* live, int x, int y)
+{
+	live->x = x;
+	live->y = y;
+	live->w = LIVE_DIAM;
+	live->h = LIVE_DIAM;
+	SDL_RenderCopy(gRenderer, gLive, NULL, live);
+}
+void drawLives()
+{
+	int i;
+	for (i = 0; i < livesCounter; i++)
+	{
+		renderLives(&lives[i], SCREEN_WIDTH - (LIVE_DIAM * (i + 1)), SCREEN_HEIGHT - LIVE_DIAM);
+	}
 }
 
 void movePaddle(float shift, float delta)
@@ -300,6 +326,7 @@ int WallCollision()
 		ball.ballPosX = paddle.padPosX + PADDLE_WIDTH / 2 - BALL_DIAM / 2;
 		ball.ballPosY = paddle.padPosY - BALL_DIAM - 1.0f;
 		paddlestick = 1;
+		livesCounter -= 1;
 	}
 
 	if (topA <= 0)
@@ -414,6 +441,17 @@ void moveBall(float delta){
 	ball.ballPosY += ball.dirY * delta;
 }
 
+void resetLevel()
+{
+	srand((unsigned)time(&t));
+	for (int i = 0; i < MAX_MAP_Y*MAX_MAP_X; i++)
+		bricks.color[i] = rand() % 4;
+	for (int i = 0; i < MAX_MAP_X*MAX_MAP_Y; i++)
+		bricks.state[i] = 0;
+
+	paddlestick = 1;
+}
+
 void fpsthink() {
 
 	Uint32 frametimesindex;
@@ -449,6 +487,19 @@ void fpsthink() {
 	framespersecond = 1000.f / framespersecond;
 }
 
+int isCompleted()
+{
+	int isEmpty;
+	for (int i = 0; i < MAX_MAP_Y*MAX_MAP_X; i++)
+	{
+		if (bricksRect[i].x == 0 && bricksRect[i].y == 0 && bricksRect[i].h == 0 && bricksRect[i].w == 0)
+			isEmpty = 1;
+		else
+			return 0;
+	}
+	return isEmpty;
+}
+
 int main(int argc, char* args[])
 {
 	//Start up SDL and create window
@@ -467,7 +518,6 @@ int main(int argc, char* args[])
 		{
 			//Main loop flag
 			int quit = 0;
-
 			//Event handler
 			SDL_Event e;
 
@@ -477,8 +527,12 @@ int main(int argc, char* args[])
 			paddle.padPosY = SCREEN_HEIGHT - 32;
 
 			ball.ballPosX = paddle.padPosX + PADDLE_WIDTH / 2 - BALL_DIAM / 2;
-			ball.ballPosY = paddle.padPosY - BALL_DIAM - 1.0f;
+			ball.ballPosY = paddle.padPosY - BALL_DIAM;
 
+			levelCounter = 0;
+			loadLevel(lelvelPaths[levelCounter]);
+			resetLevel();
+			livesCounter = 3;
 			//While application is running
 			while (!quit)
 			{
@@ -521,7 +575,15 @@ int main(int argc, char* args[])
 				if (paddlestick)
 				{
 					ball.ballPosX = paddle.padPosX + PADDLE_WIDTH / 2 - BALL_DIAM / 2;
-					ball.ballPosY = paddle.padPosY - BALL_DIAM - 1.0f;
+					ball.ballPosY = paddle.padPosY - BALL_DIAM ;
+				}
+
+				if (livesCounter == 0)
+				{
+					livesCounter = 3;
+					levelCounter = 0;
+					loadLevel(lelvelPaths[levelCounter]);
+					resetLevel();
 				}
 
 				//Clear screen
@@ -532,11 +594,26 @@ int main(int argc, char* args[])
 				renderBall();
 				renderPaddle();
 				drawBricks();
+				drawLives();
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
 
-				SDL_Delay(4);
+ 				if (isCompleted() == 1)
+				{
+					livesCounter ++;
+					levelCounter++;
+					if (levelCounter <= 4)
+						loadLevel(lelvelPaths[levelCounter]);
+					else
+					{
+						levelCounter = 0;
+						loadLevel(lelvelPaths[levelCounter]);
+					}
+					resetLevel();
+				}
+
+				SDL_Delay(3);
 
 				fpsthink();
 				printf("%f\n", framespersecond);
